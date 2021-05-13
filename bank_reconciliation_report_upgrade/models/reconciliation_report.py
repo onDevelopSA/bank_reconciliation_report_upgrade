@@ -426,10 +426,8 @@ class AccountBankReconciliationReport(models.AbstractModel):
 
             if res['currency_id'] and journal_currency and res['currency_id'] == journal_currency.id:
                 # Foreign currency, same as the journal one.
-
                 if journal_currency.is_zero(amount_currency):
                     continue
-
                 monetary_columns = [
                     {'name': ''},
                     {'name': ''},
@@ -447,7 +445,6 @@ class AccountBankReconciliationReport(models.AbstractModel):
 
                 if foreign_currency.is_zero(amount_currency) and company_currency.is_zero(balance):
                     continue
-
                 monetary_columns = [
                     {
                         'name': self.format_value(amount_currency, foreign_currency),
@@ -459,15 +456,11 @@ class AccountBankReconciliationReport(models.AbstractModel):
                         'no_format': journal_balance,
                     },
                 ]
-
             elif not res['currency_id'] and journal_currency:
                 # Single currency in the payment but a foreign currency on the journal.
-
                 journal_balance = company_currency._convert(balance, journal_currency, journal.company_id, options['date']['date_to'])
-
                 if company_currency.is_zero(balance):
                     continue
-
                 monetary_columns = [
                     {
                         'name': self.format_value(balance, company_currency),
@@ -479,13 +472,10 @@ class AccountBankReconciliationReport(models.AbstractModel):
                         'no_format': journal_balance,
                     },
                 ]
-
             else:
                 # Single currency.
-
                 if company_currency.is_zero(balance):
                     continue
-
                 monetary_columns = [
                     {'name': ''},
                     {'name': ''},
@@ -663,6 +653,7 @@ class AccountBankReconciliationReport(models.AbstractModel):
                 'name': _("Outstanding Payments/Receipts"),
                 'title_hover': _("Transactions that were entered into Odoo, but not yet reconciled (Payments triggered by invoices/bills or manually)"),
                 'columns': self._apply_groups([
+                    {'name': ''},
                     {'name': ''},
                     {'name': ''},
                     {'name': ''},
