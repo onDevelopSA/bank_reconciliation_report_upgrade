@@ -257,12 +257,6 @@ class AccountBankReconciliationReport(models.AbstractModel):
         less_total = 0.0
         AccountPayment = self.env['account.payment']
         for res in self._cr.dictfetchall():
-            payment = AccountPayment.search([('id', '=', res['payment_id'])])
-            print('*****************'* 20)# REMOVE THIS 
-            print(payment.partner_id.name) 
-            import ipdb; ipdb.set_trace() # REMOVE THIS
- 
-
             amount_currency = res['amount_residual_currency'] if res['is_account_reconcile'] else res['amount_currency']
             balance = res['amount_residual'] if res['is_account_reconcile'] else res['balance']
 
@@ -282,7 +276,9 @@ class AccountBankReconciliationReport(models.AbstractModel):
                 # Payment using a foreign currency that needs to be converted to the report's currency.
 
                 foreign_currency = self.env['res.currency'].browse(res['currency_id'])
-                journal_balance = company_currency._convert(balance, report_currency, journal.company_id, options['date']['date_to'])
+                journal_balance = company_currency._convert(
+                    balance, report_currency, journal.company_id,
+                    options['date']['date_to'])
                 if foreign_currency.is_zero(amount_currency) and company_currency.is_zero(balance):
                     continue
                 monetary_columns = [
@@ -300,8 +296,9 @@ class AccountBankReconciliationReport(models.AbstractModel):
             elif not res['currency_id'] and journal_currency:
                 # Single currency in the payment but a foreign currency on the journal.
 
-                journal_balance = company_currency._convert(balance, journal_currency, journal.company_id, options['date']['date_to'])
-
+                journal_balance = company_currency._convert(
+                    balance, journal_currency, journal.company_id,
+                    options['date']['date_to'])
                 if company_currency.is_zero(balance):
                     continue
 
@@ -332,16 +329,25 @@ class AccountBankReconciliationReport(models.AbstractModel):
                     },
                 ]
 
+            payment = AccountPayment.search([('id', '=', res['payment_id'])])
             pay_report_line = {
                 'id': res['payment_id'],
                 'name': res['name'],
+                'partner_name': payment.partner_id.name,
                 'columns': self._apply_groups([
-                    {'name': format_date(self.env, res['date']), 'class': 'date'},
-                    {'name': res['ref']},
+                    {
+                        'name': payment.partner_id.name
+                    },
+                    {
+                        'name': format_date(self.env, res['date']), 'class': 'date'
+                    },
+                    {
+                        'name': res['ref']
+                    },
                 ] + monetary_columns),
                 'model': 'account.payment',
                 'caret_options': 'account.payment',
-                'level': 3,
+                'level': 4,
             }
 
             residual_amount = monetary_columns[2]['no_format']
