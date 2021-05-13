@@ -154,8 +154,8 @@ class AccountBankReconciliationReport(models.AbstractModel):
         if journal_id:
             journal = self.env['account.journal'].browse(journal_id)
             return _("Bank Reconciliation: %s", journal.name)
-        return _("Bank Reconciliation")
-
+        return _("Bank Reconciliation"
+)
     # -------------------------------------------------------------------------
     # COLUMNS / LINES
     # -------------------------------------------------------------------------
@@ -166,7 +166,7 @@ class AccountBankReconciliationReport(models.AbstractModel):
             {'name': ''}
         ] + self._apply_groups([
             {'name': _("Partner Name"),
-             'class': 'o_account_report_line_ellipsis'},
+             'class': 'whitespace_print'},
              # 'class': 'whitespace_print o_account_report_line_ellipsis'},
             {'name': _("Date"), 'class': 'date'},
             {'name': _("Label"),
@@ -193,8 +193,10 @@ class AccountBankReconciliationReport(models.AbstractModel):
         section_report_line = {
             'id': line_id,
             'name': title,
+            'partner_name': title,
             'title_hover': title_hover,
             'columns': self._apply_groups([
+                {'name': ''},
                 {'name': ''},
                 {'name': ''},
                 {'name': ''},
@@ -218,7 +220,7 @@ class AccountBankReconciliationReport(models.AbstractModel):
                 'name': _("Total %s", section_report_line['name']),
                 'columns': section_report_line['columns'],
                 'class': 'total',
-                'level': 3,
+                'level': 4,
                 'parent_id': line_id,
             })
         return report_lines
@@ -340,7 +342,6 @@ class AccountBankReconciliationReport(models.AbstractModel):
             is_parent_unfolded = unfold_all or st_report_line['parent_id'] in options['unfolded_lines']
             if not is_parent_unfolded:
                 st_report_line['style'] = 'display: none;'
-        
         return (
             self._build_section_report_lines(options, journal, plus_report_lines, plus_total,
                 _("Including Unreconciled Bank Statement Receipts"),
