@@ -621,6 +621,7 @@ class AccountBankReconciliationReport(models.AbstractModel):
             'name': _("Balance of %s", options['account_names']),
             'title_hover': _("The Book balance in Odoo dated today"),
             'columns': self._apply_groups([
+                {'name': ''},
                 {'name': format_date(self.env, options['date']['date_to']), 'class': 'date'},
                 reference_cell,
                 {'name': ''},
