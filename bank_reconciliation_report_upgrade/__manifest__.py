@@ -1,28 +1,24 @@
 # -*- coding: utf-8 -*-
+# © 2021 onDevelop.sa
+# Autor: Idelis Gé Ramírez
+# Part of onDevelop.SA. See LICENSE file for full copyright and licensing details.
+
 {
-    'name': "bank_reconciliation_report_upgrade",
-
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
+    'name': "Bank Reconciliation Report Upgrade",
+    'summary': """Add the Partner Name column in the bank reconciliation report.""",
     'description': """
-        Long description of module's purpose
+    Add the Partner Name column in the bank reconciliation report.
     """,
-
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
-    # any module necessary for this one to work correctly
+    'author': "onDevelop.SA",
+    'website': "http://www.ondevelop.tech",
+    'category': 'Accounting/Accounting',
+    'version': '14.0.1',
+    'license': 'LGPL-3',
+    'price': 14,
+    'currency': 'USD',
+    'support': "ondevelop.sa@gmail.com",
     'depends': ['base', 'account_reports'],
-
-    # always loaded
+    'images': ['static/description/partner_column_cover.png'],
     'data': [
         # 'security/ir.model.access.csv',
         'views/views.xml',
@@ -32,4 +28,6 @@
     'demo': [
         'demo/demo.xml',
     ],
+    'installable': True,
+    'auto_install': False
 }
